@@ -1,8 +1,14 @@
+import PlayerMusic from "./PlayerMusic.js";
+import FormMusic from './FormMusic.js';
+
 function App() {
   
   return (
-    <div className='flex justify-center items-center h-full w-full'>
-      <h1 className='text-red-600 font-bold text-7xl rounded-full p-5 border-8 border-red-600 bg-white'>Hello World!</h1>
+    <div className='flex flex-col justify-between items-center h-full w-full bg-cyan-950'>
+      <div className="grid grid-cols-1 lg:grid-cols-2 w-full">
+        <FormMusic />
+      </div>
+      <PlayerMusic />
     </div>
   );
 }
