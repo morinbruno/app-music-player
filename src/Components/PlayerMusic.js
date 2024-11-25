@@ -1,132 +1,172 @@
-import { Slider, Button } from "@nextui-org/react";
-import { PauseIcon, PlayIcon, ArrowPathRoundedSquareIcon } from "@heroicons/react/24/solid";
-import { useState, useEffect } from "react";
+import { Slider, Button, Image } from "@nextui-org/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlay, faPause, faRepeat, faForwardStep, faBackwardStep } from "@fortawesome/free-solid-svg-icons";
+import { useState, useEffect, useRef } from "react";
 import music from "../assets/music-test/music.mp3";
+import cover from "../assets/music-test/cover.jpg"
 
 const PlayerMusic = () => {
-    const [isRepeated, setRepeat] = useState(false);
-    const [isPaused, setPause] = useState(false);
-    const [duration, setDuration] = useState(null);
-    const [currentTime, setCurrentTime] = useState(null);
-    const mediaPlayer = document.querySelector('audio');
+    const [isRepeated, setRepeated] = useState(false);
+    const [isPaused, setPaused] = useState(false);
+    const [duration, setDuration] = useState(0);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [volume, setVolume] = useState(1)
 
+    const audioRef = useRef(null); // Utilisation de useRef pour le lecteur audio
+
+    // Met à jour la durée totale et gère le temps actuel
     useEffect(() => {
-        const mediaPlayer = document.querySelector('audio');
+        const audio = audioRef.current;
 
-        setInterval(() => {
-            setCurrentTime(mediaPlayer.currentTime)
-        }, 1000)
-    })
+        // Vérifie et initialise la durée lorsque l'audio est chargé
+        const onLoadedMetadata = () => setDuration(audio.duration || 0);
 
-    function calculDuration(time) {
-        let minutes = parseInt(time/60)
-        let secondes = (time%60).toFixed(0)
+        // Met à jour le temps actuel à intervalles réguliers
+        const interval = setInterval(() => {
+            if (!audio.paused) setCurrentTime(audio.currentTime || 0);
+        }, 1000);
 
-        if(minutes.length === 1){
-            minutes = "0"+minutes
-        }
+        audio.addEventListener("loadedmetadata", onLoadedMetadata);
 
-        if(secondes.length === 1){
-            secondes = "0"+secondes
-        }
+        return () => {
+            clearInterval(interval); // Nettoyage de l'intervalle
+            audio.removeEventListener("loadedmetadata", onLoadedMetadata);
+        };
+    }, []);
 
-        return minutes + ":" + secondes
-    }
+    // Formate la durée (minutes:secondes)
+    const formatTime = (time) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.floor(time % 60);
+        return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+    };
 
-    function pausePlay() {
-        const mediaPlayer = document.querySelector('audio');
-
-        mediaPlayer.volume = 0.3
-        setDuration(mediaPlayer.duration)
-        
-        if(isPaused){
-            mediaPlayer.pause()
+    // Lecture et pause de la musique
+    const togglePlayPause = () => {
+        const audio = audioRef.current;
+        document.title = audio.title;
+        if (isPaused) {
+            audio.pause();
         } else {
-            mediaPlayer.play()
+            audio.play();
         }
-        setPause(!isPaused)
-    }
+        setPaused(!isPaused);
+    };
 
-    function repeat() {
-        const mediaPlayer = document.querySelector('audio');
+    // Activer/désactiver le mode boucle
+    const toggleRepeat = () => {
+        const audio = audioRef.current;
+        audio.loop = !isRepeated;
+        setRepeated(!isRepeated);
+    };
 
-        if(!isRepeated){
-            mediaPlayer.setAttribute('loop', true)
-        } else {
-            mediaPlayer.setAttribute('loop', false)
-        }
-        setRepeat(!isRepeated)
-    }
+    // Mise à jour du slider
+    const updateSlider = (value) => {
+        const audio = audioRef.current;
+        audio.currentTime = value;
+        setCurrentTime(value);
+    };
 
-    function setSlider(value){
-        const mediaPlayer = document.querySelector('audio');
-
-        mediaPlayer.currentTime = value
-        setCurrentTime(value)
+    const updateVolume = (value) => {
+        const audio = audioRef.current;
+        audio.volume = value;
+        setVolume(value);
     }
 
     return (
-        <div className='flex flex-col w-full h-20 shadow z-50 overflow-hidden'>
+        <div className="flex flex-col w-full shadow z-50">
             {/* Slider */}
             <Slider
                 aria-label="Music progress"
                 classNames={{
-                    track: "bg-default-500/30 rounded-none mb-0 cursor-pointer border-none",
-                    thumb: "w-4 h-4 after:w-4 after:h-4 after:bg-foreground opacity-0 hover:opacity-100 duration-100 hover:duraction-100 ",
+                    track: "bg-default-500/30 rounded-none m-0 cursor-pointer border-none",
+                    thumb: "w-4 h-4 after:w-4 after:h-4 after:bg-foreground opacity-0 hover:opacity-100 duration-100 hover:duration-100",
                 }}
                 color="warning"
                 size="sm"
-                value={currentTime !== null ? mediaPlayer.currentTime : ""}
-                maxValue={duration !== null ? mediaPlayer.duration : ""}
-                onChange={setSlider}
-                step={1}
+                value={currentTime}
+                minValue={0}
+                maxValue={duration}
+                onChangeEnd={updateSlider}
             />
 
             {/* Boutons du lecteur */}
-            <div className="flex h-full bg-gray-700 px-4 py-2">
-                <div className='grid grid-cols-3 w-full'>
-                    <div
-                        className='flex justify-start items-center'
-                    >
-                        {mediaPlayer != null ? calculDuration(currentTime) : "--:--"} / {duration ? calculDuration(duration) : "--:--"}
+            <div className="flex bg-[#A33634] px-4 py-2">
+                <div className="grid grid-cols-3 w-full">
+                    {/* Affichage temps */}
+                    <div className="flex justify-start h-full items-center flex-wrap ">
+                        <Image
+                            src={cover}
+                            isBlurred
+                            height={84}
+                            width={84}
+                            radius="md"
+                            shadow="sm"
+                        />
+                        <div className="md:ms-4 text-nowrap flex flex-col">
+                            <span className="mb-2 text-warning-500 font-semibold">ANIMA</span>
+                            {formatTime(currentTime)} / {duration > 0 ? formatTime(duration) : "--:--"}
+                        </div>
                     </div>
-                    <div
-                        className='flex justify-center items-center'
-                    >
+                    {/* Bouton lecture/pause */}
+                    <div className="flex justify-center items-center gap-5">
                         <Button
                             isIconOnly
-                            className='bg-gray-800 rounded-full'
-                            onClick={pausePlay}
+                            className="rounded-full bg-transparant"
                             disableRipple={false}
                             disableAnimation={true}
                         >
-                            {isPaused ? <PauseIcon width={24} /> : <PlayIcon width={24} />}
+                            <FontAwesomeIcon icon={faBackwardStep} size="xl" />
+                        </Button>
+                        <Button
+                            isIconOnly
+                            className="rounded-full bg-opacity-50"
+                            onClick={togglePlayPause}
+                            disableRipple={false}
+                            disableAnimation={true}
+                        >
+                            {isPaused ? <FontAwesomeIcon icon={faPause} size="xl" /> : <FontAwesomeIcon icon={faPlay} size="xl"/>}
+                        </Button>
+                        <Button
+                            isIconOnly
+                            className="rounded-full bg-transparant"
+                            disableRipple={false}
+                            disableAnimation={true}
+                        >
+                            <FontAwesomeIcon icon={faForwardStep} size="xl" />
                         </Button>
                     </div>
-                    <div
-                        className='flex justify-end items-center'
-                    >
-                        <div>
-                            <Button
-                                isIconOnly
-                                className='bg-transparent'
-                                onClick={repeat}
-                            >
-                                <ArrowPathRoundedSquareIcon
-                                    className={isRepeated ? "text-warning size-6" : "size-6"}
-                                    title={isRepeated ? "Mode boucle" : "Mode simple"}
-                                />
-                            </Button>
-                        </div>
+                    {/* Bouton boucle */}
+                    <div className="flex justify-end items-center">
+                        <Button isIconOnly className="bg-transparent" onClick={toggleRepeat}>
+                              <FontAwesomeIcon icon={faRepeat} 
+                                className={isRepeated ? "text-warning" : ""}
+                                title={isRepeated ? "Mode boucle" : "Mode simple"}
+                                size="xl"
+                            />
+                        </Button>
+                        <Slider
+                            size="sm"
+                            step={0.01}
+                            maxValue={1}
+                            minValue={0}
+                            color="warning"
+                            orientation="vertical"
+                            aria-label="Volume"
+                            value={volume}
+                            onChange={updateVolume}
+                            classNames={{
+                                thumb: "w-2 h-2 after:w-2 after:h-2 after:bg-foreground",
+                                track: "border-none"
+                            }}
+                        />
                     </div>
                 </div>
             </div>
-            <audio 
-                src={music}
-                preload=""
-            />
+            {/* Lecteur audio */}
+            <audio ref={audioRef} src={music} preload="metadata" />
         </div>
-    )
+    );
 };
 
 export default PlayerMusic;
