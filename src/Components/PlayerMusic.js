@@ -2,10 +2,9 @@ import { Slider, Button, Image } from "@nextui-org/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faRepeat, faForwardStep, faBackwardStep } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect, useRef } from "react";
-import music from "../assets/music-test/music.mp3";
 import cover from "../assets/music-test/cover.jpg"
 
-const PlayerMusic = () => {
+const PlayerMusic = ({URLMusic, setURLMusic, titleMusic, titleAlbum, nameArtist}) => {
     const [isRepeated, setRepeated] = useState(false);
     const [isPaused, setPaused] = useState(false);
     const [duration, setDuration] = useState(0);
@@ -20,18 +19,18 @@ const PlayerMusic = () => {
 
         // Vérifie et initialise la durée lorsque l'audio est chargé
         const onLoadedMetadata = () => setDuration(audio.duration || 0);
-
-        // Met à jour le temps actuel à intervalles réguliers
-        const interval = setInterval(() => {
-            if (!audio.paused) setCurrentTime(audio.currentTime || 0);
-        }, 1000);
-
-        audio.addEventListener("loadedmetadata", onLoadedMetadata);
-
-        return () => {
-            clearInterval(interval); // Nettoyage de l'intervalle
-            audio.removeEventListener("loadedmetadata", onLoadedMetadata);
-        };
+            // Met à jour le temps actuel à intervalles réguliers
+            const interval = setInterval(() => {
+                if (!audio.paused) setCurrentTime(audio.currentTime || 0);
+                if(audio.currentTime === audio.duration) setPaused(false);
+            }, 1000);
+    
+            audio.addEventListener("loadedmetadata", onLoadedMetadata);
+    
+            return () => {
+                clearInterval(interval); // Nettoyage de l'intervalle
+                audio.removeEventListener("loadedmetadata", onLoadedMetadata);
+            };
     }, []);
 
     // Formate la durée (minutes:secondes)
@@ -74,7 +73,7 @@ const PlayerMusic = () => {
     }
 
     return (
-        <div className="flex flex-col w-full shadow z-50">
+        <div className="flex flex-col w-full shadow z-40">
             {/* Slider */}
             <Slider
                 aria-label="Music progress"
@@ -148,7 +147,7 @@ const PlayerMusic = () => {
                         <Slider
                             size="sm"
                             step={0.01}
-                            maxValue={1}
+                            maxValue={0.7}
                             minValue={0}
                             color="warning"
                             orientation="vertical"
@@ -164,7 +163,7 @@ const PlayerMusic = () => {
                 </div>
             </div>
             {/* Lecteur audio */}
-            <audio ref={audioRef} src={music} preload="metadata" />
+            <audio ref={audioRef} src={URLMusic} preload="metadata" />
         </div>
     );
 };
