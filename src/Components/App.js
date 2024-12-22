@@ -1,10 +1,32 @@
 import PlayerMusic from "./PlayerMusic.js";
 import ListMusic from "./ListMusic.js";
 import AddMenu from "./AddMenu.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getAllSongs, openDB } from "../models/dbIndexed";
+import { API } from "../models/api";
 
 function App() {
   const [URLMusic, setURLMusic] = useState("");
+  const [pistes, setPistes] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        openDB()
+          .then(() => {
+            getAllSongs().then((songs) => {
+              API.pistes = songs;
+              setPistes(API.pistes);
+            });
+          })
+          .catch((error) => {
+            console.error("Erreur lors de l'ouverture de la base de données :", error);
+          });
+      } catch (error) {
+        console.error("Erreur lors de la récupération des pistes :", error);
+      }
+    })();
+  }, []);
 
   function openAddMenu(){
     const addMenu = document.getElementById("addMenu");
@@ -12,17 +34,22 @@ function App() {
   }
 
   function hideAddMenu(e){
+    const addMenu = document.getElementById("addMenu");
     if(e.target.id === "addMenu"){
-      const addMenu = document.getElementById("addMenu");
       addMenu.classList.replace("flex", "hidden");
     }
   }
 
+  function hideAddMenuBtn(){
+    const addMenu = document.getElementById("addMenu");
+    addMenu.classList.replace("flex", "hidden");
+  }
+
   return (
     <div className="flex flex-col justify-between items-center h-full w-full bg-gradient-to-br from-[#A33634] to-[#424290]">
-      <AddMenu URLMusic={URLMusic} setURLMusic={setURLMusic} hideAddMenu={hideAddMenu} />
+      <AddMenu URLMusic={URLMusic} setURLMusic={setURLMusic} hideAddMenu={hideAddMenu} hideAddMenuBtn={hideAddMenuBtn} setPistes={setPistes} />
       <div className="grid grid-rows-1 w-full h-full">
-        <ListMusic openAddMenu={openAddMenu} />
+        <ListMusic openAddMenu={openAddMenu} pistes={pistes} />
       </div>
       <PlayerMusic URLMusic={URLMusic} setURLMusic={setURLMusic} />
     </div>
