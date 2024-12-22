@@ -2,9 +2,8 @@ import { Slider, Button, Image } from "@nextui-org/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faRepeat, faForwardStep, faBackwardStep } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect, useRef } from "react";
-import cover from "../assets/music-test/cover.jpg"
 
-const PlayerMusic = ({URLMusic, setURLMusic, titleMusic, titleAlbum, nameArtist}) => {
+const PlayerMusic = ({URLMusic, titleMusic, titleAlbum, nameArtist, cover}) => {
     const [isRepeated, setRepeated] = useState(false);
     const [isPaused, setPaused] = useState(false);
     const [duration, setDuration] = useState(0);
@@ -94,16 +93,22 @@ const PlayerMusic = ({URLMusic, setURLMusic, titleMusic, titleAlbum, nameArtist}
                 <div className="grid grid-cols-3 w-full">
                     {/* Affichage temps */}
                     <div className="flex justify-start h-full items-center flex-wrap ">
-                        <Image
-                            src={cover}
-                            isBlurred
-                            height={84}
-                            width={84}
-                            radius="md"
-                            shadow="sm"
-                        />
+                        {cover ? (
+                            <Image
+                                src={cover}
+                                isBlurred
+                                height={84}
+                                width={84}
+                                radius="md"
+                                shadow="sm"
+                                className="bg-warning"
+                            />
+                            ) : (
+                                <div className="bg-warning rounded-lg h-[84px] aspect-square flex justify-center items-center text-[32pt] font-semibold">{titleMusic[0]}</div>
+                            )
+                        }
                         <div className="md:ms-4 text-nowrap flex flex-col">
-                            <span className="mb-2 text-warning-500 font-semibold">ANIMA</span>
+                            <span className="mb-2 text-warning-500 font-semibold">{titleMusic}</span>
                             {formatTime(currentTime)} / {duration > 0 ? formatTime(duration) : "--:--"}
                         </div>
                     </div>

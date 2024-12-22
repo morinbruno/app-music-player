@@ -8,6 +8,8 @@ import { API } from "../models/api";
 function App() {
   const [URLMusic, setURLMusic] = useState("");
   const [pistes, setPistes] = useState([]);
+  const [cover, setCover] = useState("");
+  const [titleMusic, setTitleMusic] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -49,9 +51,9 @@ function App() {
     <div className="flex flex-col justify-between items-center h-full w-full bg-gradient-to-br from-[#A33634] to-[#424290]">
       <AddMenu URLMusic={URLMusic} setURLMusic={setURLMusic} hideAddMenu={hideAddMenu} hideAddMenuBtn={hideAddMenuBtn} setPistes={setPistes} />
       <div className="grid grid-rows-1 w-full h-full">
-        <ListMusic openAddMenu={openAddMenu} pistes={pistes} />
+        <ListMusic openAddMenu={openAddMenu} pistes={pistes} URLMusic={URLMusic} setURLMusic={setURLMusic} setCover={setCover} setTitleMusic={setTitleMusic} />
       </div>
-      <PlayerMusic URLMusic={URLMusic} setURLMusic={setURLMusic} />
+      <PlayerMusic URLMusic={URLMusic} setURLMusic={setURLMusic} cover={cover} titleMusic={titleMusic} />
     </div>
   );
 }

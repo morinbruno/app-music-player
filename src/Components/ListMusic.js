@@ -1,8 +1,18 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMusic, faPlus } from "@fortawesome/free-solid-svg-icons";
 import {ScrollShadow, Button, Image} from "@nextui-org/react";
+import { getSong } from "../models/dbIndexed";
 
-const ListMusic = ({openAddMenu, pistes}) => {
+const ListMusic = ({openAddMenu, pistes, setCover, setURLMusic, URLMusic, setTitleMusic}) => {
+    const selectTrack = async (id) => {
+        const result = await getSong(id);
+        const url = URLMusic ? URL.revokeObjectURL(URLMusic) : URL.createObjectURL(result.mp3File);
+        const cover = result.coverUrl ? result.coverUrl : null;
+        setTitleMusic(result.title);
+        setCover(cover);
+        setURLMusic(url);
+    };
+
     return (
         <div className="px-4 py-3 flex flex-col flex-1 m-2 border-2 bg-[#A33634] rounded-lg shadow-lg border-warning bg-opacity-70">
             <div className="text-xl border-b-2 border-warning pb-2 inline-flex items-center mb-3">
@@ -25,7 +35,7 @@ const ListMusic = ({openAddMenu, pistes}) => {
                     }}
                 >
                     {pistes.map((piste) => (
-                        <div className="flex rounded-lg overflow-hidden mb-4 shadow-lg border-warning border-2 cursor-pointer" key={piste.id} >
+                        <div className="flex rounded-lg overflow-hidden mb-4 shadow-lg border-warning border-2 cursor-pointer" key={piste.id} onClick={() => {selectTrack(piste.id)}} >
                             {piste.coverUrl?
                             <div className='me-2 overflow-hidden aspect-square'>
                                 <Image 
@@ -37,7 +47,7 @@ const ListMusic = ({openAddMenu, pistes}) => {
                                 />
                             </div> :
                                 <div className="bg-warning me-2" >
-                                    <div className='flex justify-center items-center text-center' style={{height: "100px", width: "100px"}}>Cover non trouvé</div>
+                                    <div className='flex justify-center items-center text-center text-[32pt] font-semibold' style={{height: "100px", width: "100px"}}>{piste.title[0].toUpperCase()}</div>
                                 </div>
                             }
                             <div
@@ -49,7 +59,7 @@ const ListMusic = ({openAddMenu, pistes}) => {
                                     {piste.title} - {piste.albumTitle}
                                 </h1>
                                 <h2
-                                    className='text-sm font-semibold mb-2'
+                                    className='text-sm font-semibold mb-2 capitalize'
                                 >
                                     {piste.artistName}
                                 </h2>

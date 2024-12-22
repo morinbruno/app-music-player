@@ -17,8 +17,8 @@ const AddMenu = ({ hideAddMenu, hideAddMenuBtn, setPistes }) => {
   const [albums, setAlbums] = useState([]);
 
   useEffect(() => {
-    (async () => {
-      if (artist === "" || album === "") {
+    const fetchAlbums = async () => {
+      if (artist === "" || album === "" || title === "") {
         setAlbums([]);
       } else {
         try {
@@ -27,21 +27,33 @@ const AddMenu = ({ hideAddMenu, hideAddMenuBtn, setPistes }) => {
           // Récupérer toutes les couvertures en parallèle
           const albumsWithCovers = await Promise.all(
             getAlbums.map(async (album) => {
-              album.cover = await API.getAlbumCover(album.id);
-              return album; // Retourner l'album avec la couverture
+              let cover = await API.getAlbumCover(album.id);
+              const matching = {
+                id: album.id,
+                cover: cover,
+                title: album.title,
+                date: await API.getAlbumInfo(album.id).then((info) => info.date),
+                "artist-credit": album["artist-credit"],
+                tracks: await API.getAlbumInfo(album.id).then((info) => info.media[0].tracks.filter((track) => track.title.toLowerCase() === title.toLowerCase()))
+              };
+              if (!Array.isArray(matching.tracks)) matching.tracks = [matching.tracks];
+              return matching;
             })
           );
-  
+          console.log(albumsWithCovers);
           setAlbums(albumsWithCovers); // Mettre à jour albums après avoir récupéré les couvertures
         } catch (error) {
           console.error("Erreur lors de la récupération des albums :", error);
           setAlbums([]); // En cas d'erreur, réinitialiser les albums
         }
       }
-    })();
+    };
+
+    fetchAlbums();
   }, [album, title, artist]);
 
   const addMusic = async () => {
+    const inputMp3File = document.getElementById("mp3File");
     const song = {
       title: title,
       albumTitle: album,
@@ -59,6 +71,7 @@ const AddMenu = ({ hideAddMenu, hideAddMenuBtn, setPistes }) => {
         setAlbum("");
         setArtist("");
         setMp3File("");
+        inputMp3File.value = "";
         hideAddMenuBtn();
       })
       .catch((error) => {

@@ -84,6 +84,7 @@ const FormMusic = ({title, setTitle, artist, setArtist, album, mp3File, setAlbum
                             description: "text-white"
                         }}
                         onChange={handleMusic}
+                        id={"mp3File"}
                     />
                 </div>
                 <div>
