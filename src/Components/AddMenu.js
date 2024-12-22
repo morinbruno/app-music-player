@@ -2,12 +2,9 @@ import FormMusic from "./FormMusic";
 import SelectAlbumSearch from "./SelectAlbumSearch";
 import { useState, useEffect } from "react";
 import { API } from "../models/api";
-import {Button} from "@nextui-org/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { openDB, addSong, getAllSongs } from "../models/dbIndexed";
 
-const AddMenu = ({ hideAddMenu, hideAddMenuBtn, setPistes }) => {
+const AddMenu = ({ hideAddMenu, setPistes }) => {
   const [album, setAlbum] = useState("");
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
@@ -23,7 +20,7 @@ const AddMenu = ({ hideAddMenu, hideAddMenuBtn, setPistes }) => {
       } else {
         try {
           const getAlbums = await API.getAlbum(album, artist);
-  
+
           // Récupérer toutes les couvertures en parallèle
           const albumsWithCovers = await Promise.all(
             getAlbums.map(async (album) => {
@@ -54,6 +51,8 @@ const AddMenu = ({ hideAddMenu, hideAddMenuBtn, setPistes }) => {
 
   const addMusic = async () => {
     const inputMp3File = document.getElementById("mp3File");
+    const addMenu = document.getElementById("addMenu");
+
     const song = {
       title: title,
       albumTitle: album,
@@ -72,21 +71,21 @@ const AddMenu = ({ hideAddMenu, hideAddMenuBtn, setPistes }) => {
         setArtist("");
         setMp3File("");
         inputMp3File.value = "";
-        hideAddMenuBtn();
+        addMenu.classList.replace("flex", "hidden");
       })
       .catch((error) => {
         console.error("Erreur lors de l'ajout de la musique :", error);
       });
 
-      API.pistes = await getAllSongs();
-      setPistes(API.pistes);
-      console.log(API.pistes);
+    API.pistes = await getAllSongs();
+    setPistes(API.pistes);
+    console.log(API.pistes);
   }
 
   return (
     <div className="absolute h-screen w-screen z-50 bg-black bg-opacity-40 justify-center items-center hidden" id="addMenu" onClick={hideAddMenu}>
       <div className="container">
-        <div className="grid grid-cols-1 lg:grid-cols-2 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 w-full gap-2 px-5">
           <FormMusic
             title={title}
             setTitle={setTitle}
@@ -102,16 +101,6 @@ const AddMenu = ({ hideAddMenu, hideAddMenuBtn, setPistes }) => {
           <SelectAlbumSearch albums={albums} setCover={setCover} />
         </div>
       </div>
-      <Button
-        isIconOnly={true} 
-        disableAnimation={true} 
-        className="absolute top-2 right-2" 
-        onClick={hideAddMenuBtn}
-        color={"warning"}
-        id={"btnCloseAddMenu"}
-      >
-        <FontAwesomeIcon icon={faXmark} />
-      </Button>
     </div>
   );
 }

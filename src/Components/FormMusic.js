@@ -45,7 +45,7 @@ const FormMusic = ({title, setTitle, artist, setArtist, album, mp3File, setAlbum
     }
 
     return (
-        <div className="p-4 backdrop-blur m-2 border-2 bg-[#A33634] rounded-lg shadow-lg border-warning bg-opacity-70 h-full">
+        <div className="p-4 backdrop-blur border-2 bg-[#A33634] rounded-lg shadow-lg border-warning bg-opacity-70 h-full">
             <h1 className="mb-4 text-xl">Ajouter une musique à la bibliothèque</h1>
             <form className="max-full">
                 <div className="mb-2">

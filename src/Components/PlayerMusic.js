@@ -104,7 +104,7 @@ const PlayerMusic = ({URLMusic, titleMusic, titleAlbum, nameArtist, cover}) => {
                                 className="bg-warning"
                             />
                             ) : (
-                                <div className="bg-warning rounded-lg h-[84px] aspect-square flex justify-center items-center text-[32pt] font-semibold">{titleMusic[0]}</div>
+                                <div className="bg-warning rounded-lg h-[84px] aspect-square flex justify-center items-center text-[32pt] font-semibold">{titleMusic && titleMusic[0].toUpperCase()}</div>
                             )
                         }
                         <div className="md:ms-4 text-nowrap flex flex-col">
@@ -151,7 +151,7 @@ const PlayerMusic = ({URLMusic, titleMusic, titleAlbum, nameArtist, cover}) => {
                         </Button>
                         <Slider
                             size="sm"
-                            step={0.01}
+                            step={0.05}
                             maxValue={0.7}
                             minValue={0}
                             color="warning"

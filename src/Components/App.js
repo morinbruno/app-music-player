@@ -42,14 +42,9 @@ function App() {
     }
   }
 
-  function hideAddMenuBtn(){
-    const addMenu = document.getElementById("addMenu");
-    addMenu.classList.replace("flex", "hidden");
-  }
-
   return (
     <div className="flex flex-col justify-between items-center h-full w-full bg-gradient-to-br from-[#A33634] to-[#424290]">
-      <AddMenu URLMusic={URLMusic} setURLMusic={setURLMusic} hideAddMenu={hideAddMenu} hideAddMenuBtn={hideAddMenuBtn} setPistes={setPistes} />
+      <AddMenu URLMusic={URLMusic} setURLMusic={setURLMusic} hideAddMenu={hideAddMenu} setPistes={setPistes} />
       <div className="grid grid-rows-1 w-full h-full">
         <ListMusic openAddMenu={openAddMenu} pistes={pistes} URLMusic={URLMusic} setURLMusic={setURLMusic} setCover={setCover} setTitleMusic={setTitleMusic} />
       </div>

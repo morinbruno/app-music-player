@@ -24,7 +24,7 @@ const SelectAlbumSearch = ({ albums, setCover }) => {
     }, [setCover]);
 
     return (
-        <div className="m-2 border-2 bg-[#A33634] rounded-lg shadow-lg border-warning p-5 overflow-hidden flex flex-col h-full">
+        <div className="border-2 bg-[#A33634] rounded-lg shadow-lg border-warning p-5 overflow-hidden flex flex-col h-full">
             <h1 className='mb-4 text-xl'>Résultat de la recherche</h1>
             <div className='relative h-full'>
                 {!albums || albums.length === 0 ? (
