@@ -4,13 +4,13 @@ const API = {
 }
 
 API.getAlbum = async (nameAbulm, nameArtist) => {
-    const reponse = await fetch(`${API.baseURL}/release/?query=primarytype:"album" AND artist:${nameArtist} AND release:"${nameAbulm}"?inc=aliases%2Bartist-credits%2Blabels%2Bdiscids%2Brecordings&fmt=json`);
+    const reponse = await fetch(`${API.baseURL}/release/?query=artist:${nameArtist} AND release:"${nameAbulm}"?inc=aliases%2Bartist-credits%2Blabels%2Bdiscids%2Brecordings&fmt=json`);
     const data = await reponse.json();
     return data.releases;
 }
 
 API.getAlbumId = async (nameAbulm, nameArtist) => {
-    const reponse = await fetch(`${API.baseURL}/release/?query=primarytype:"album" AND artist:${nameArtist} AND release:"${nameAbulm}"?inc=aliases%2Bartist-credits%2Blabels%2Bdiscids%2Brecordings&fmt=json`);
+    const reponse = await fetch(`${API.baseURL}/release/?query=artist:${nameArtist} AND release:"${nameAbulm}"?inc=aliases%2Bartist-credits%2Blabels%2Bdiscids%2Brecordings&fmt=json`);
     const data = await reponse.json();
     return data.releases[0].id;
 }
