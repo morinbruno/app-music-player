@@ -55,7 +55,7 @@ const SelectAlbumSearch = ({ albums, setCover }) => {
                                                 </div>
                                             ) : (
                                                 <div className="bg-warning me-2">
-                                                    <div className='flex justify-center items-center text-center' style={{ height: "100px", width: "100px" }}>Cover non trouvé</div>
+                                                    <div className='flex justify-center items-center text-center text-[32pt] font-semibold' style={{ height: "100px", width: "100px" }}>{track.title[0].toUpperCase()}</div>
                                                 </div>
                                             )}
                                             <div className='flex flex-col flex-1 justify-center'>
