@@ -1,8 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMusic, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { ScrollShadow, Button, Image } from "@nextui-org/react";
+import { useEffect } from "react";
+import { Vibrant } from "node-vibrant/browser";
 
-const ListMusic = ({ openAddMenu, pistes, setCover, setURLMusic, URLMusic, setMusicSelected }) => {
+const ListMusic = ({ openAddMenu, pistes, setCover, cover, setURLMusic, URLMusic, setMusicSelected }) => {
     const selectTrack = async (id) => {
         const result = pistes.find((piste) => piste.id === id)
         URLMusic && URL.revokeObjectURL(URLMusic);
@@ -16,8 +18,29 @@ const ListMusic = ({ openAddMenu, pistes, setCover, setURLMusic, URLMusic, setMu
         setURLMusic(url);
     };
 
+    // Changement de couleur de fond en fonction de la pochette de l'album
+    useEffect(() => {
+        (async () => {
+            const listMusic = document.getElementById("listMusic");
+            const playerMusic = document.getElementById("playerMusic");
+            if(cover) {
+                Vibrant.from(cover).getPalette()
+                .then(palette => {
+                    const dominantColor = palette.Vibrant.rgb;
+                    const gradient = `linear-gradient(to bottom right, rgb(${dominantColor.join(',')}), rgb(${palette.Muted.rgb.join(',')}))`;
+                    console.log("Dégradé CSS :", gradient);
+                    listMusic.style.background = gradient;
+                    playerMusic.style.backgroundColor = `rgb(${palette.DarkVibrant.rgb.join(',')})`;
+                })
+                .catch(err => {
+                    console.error("Erreur :", err);
+                });
+            }
+        })();
+    }, [cover]);
+
     return (
-        <div className="px-4 py-3 flex flex-col flex-1 bg-[#A33634] bg-opacity-70">
+        <div className="px-4 py-3 flex flex-col flex-1 bg-gradient-to-br from-[#A33634] to-[#6e5352] bg-opacity-70" id="listMusic">
             <div className="text-xl border-b-2 border-warning pb-2 inline-flex items-center mb-3">
                 <h1 className=""><FontAwesomeIcon icon={faMusic} className="me-2" />Bibliothèque musical</h1>
                 <Button
@@ -54,7 +77,7 @@ const ListMusic = ({ openAddMenu, pistes, setCover, setURLMusic, URLMusic, setMu
                                     src={piste.coverUrl}
                                     title={piste.title}
                                     alt={""}
-                                    className="absolute top-0 left-0 w-full h-full object-cover blur-md"
+                                    className="absolute top-0 left-0 w-full h-full object-cover blur-md "
                                 />
                                 {piste.coverUrl ?
                                     <div className='me-2 overflow-hidden aspect-square'>
@@ -67,7 +90,7 @@ const ListMusic = ({ openAddMenu, pistes, setCover, setURLMusic, URLMusic, setMu
                                         />
                                     </div> :
                                     <div className="bg-warning me-2" >
-                                        <div className='flex justify-center items-center text-center text-[32pt] font-semibold' style={{ height: "100px", width: "100px" }}>{piste.title[0].toUpperCase()}</div>
+                                        <div className='flex justify-center items-center text-center text-[32pt] font-semibold bg-warning' style={{ height: "100px", width: "100px" }}>{piste.title[0].toUpperCase()}</div>
                                     </div>
                                 }
                                 <div

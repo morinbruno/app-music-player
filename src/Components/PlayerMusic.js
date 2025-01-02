@@ -138,7 +138,7 @@ const PlayerMusic = ({ URLMusic, setURLMusic, cover, setCover, musicSelected, pi
             />
 
             {/* Boutons du lecteur */}
-            <div className="flex bg-[#A33634] px-4 py-2">
+            <div className="flex bg-[#A33634] px-4 py-2" id="playerMusic">
                 <div className="grid grid-cols-3 w-full">
                     {/* Affichage informations lecture */}
                     <div className="flex justify-start h-full items-center flex-wrap ">
