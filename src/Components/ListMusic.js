@@ -1,15 +1,16 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMusic, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { ScrollShadow, Button, Image } from "@nextui-org/react";
-import { getSong } from "../models/dbIndexed";
 
-const ListMusic = ({ openAddMenu, pistes, setCover, setURLMusic, URLMusic, setTitleMusic }) => {
+const ListMusic = ({ openAddMenu, pistes, setCover, setURLMusic, URLMusic, setMusicSelected }) => {
     const selectTrack = async (id) => {
-        const result = await getSong(id);
-        const url = URLMusic ? URL.revokeObjectURL(URLMusic) : URL.createObjectURL(result.mp3File);
+        const result = pistes.find((piste) => piste.id === id)
+        URLMusic && URL.revokeObjectURL(URLMusic);
+        const url = URL.createObjectURL(result.mp3File);
         const cover = result.coverUrl ? result.coverUrl : null;
 
-        setTitleMusic(result.title);
+        console.log("Musique sélectionnée :", result);
+        setMusicSelected(result);
         setCover(cover);
         setURLMusic(url);
     };
