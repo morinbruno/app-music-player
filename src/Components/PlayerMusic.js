@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faRepeat, faForwardStep, faBackwardStep } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect, useRef } from "react";
 
-const PlayerMusic = ({URLMusic, titleMusic, titleAlbum, nameArtist, cover}) => {
+const PlayerMusic = ({ URLMusic, setURLMusic, cover, setCover, musicSelected, pistes, setMusicSelected }) => {
     const [isRepeated, setRepeated] = useState(false);
     const [isPaused, setPaused] = useState(false);
     const [duration, setDuration] = useState(0);
@@ -18,19 +18,28 @@ const PlayerMusic = ({URLMusic, titleMusic, titleAlbum, nameArtist, cover}) => {
 
         // Vérifie et initialise la durée lorsque l'audio est chargé
         const onLoadedMetadata = () => setDuration(audio.duration || 0);
-            // Met à jour le temps actuel à intervalles réguliers
-            const interval = setInterval(() => {
-                if (!audio.paused) setCurrentTime(audio.currentTime || 0);
-                if(audio.currentTime === audio.duration) setPaused(false);
-            }, 1000);
-    
-            audio.addEventListener("loadedmetadata", onLoadedMetadata);
-    
-            return () => {
-                clearInterval(interval); // Nettoyage de l'intervalle
-                audio.removeEventListener("loadedmetadata", onLoadedMetadata);
-            };
+        // Met à jour le temps actuel à intervalles réguliers
+        const interval = setInterval(() => {
+            if (!audio.paused) setCurrentTime(audio.currentTime || 0);
+            if (audio.currentTime === audio.duration) setPaused(false);
+        }, 1000);
+
+        audio.addEventListener("loadedmetadata", onLoadedMetadata);
+
+        return () => {
+            clearInterval(interval); // Nettoyage de l'intervalle
+            audio.removeEventListener("loadedmetadata", onLoadedMetadata);
+        };
     }, []);
+
+    useEffect(() => {
+        const audio = audioRef.current;
+        if (URLMusic) {
+            audio.src = URLMusic;
+            setPaused(true);
+            audio.play();
+        }
+    }, [URLMusic]);
 
     // Formate la durée (minutes:secondes)
     const formatTime = (time) => {
@@ -41,14 +50,18 @@ const PlayerMusic = ({URLMusic, titleMusic, titleAlbum, nameArtist, cover}) => {
 
     // Lecture et pause de la musique
     const togglePlayPause = () => {
-        const audio = audioRef.current;
-        document.title = audio.title;
-        if (isPaused) {
-            audio.pause();
+        if(Object.keys(musicSelected).length === 0){
+            alert("Aucune musique sélectionnée");
         } else {
-            audio.play();
+            const audio = audioRef.current;
+            document.title = audio.title;
+            if (isPaused) {
+                audio.pause();
+            } else {
+                audio.play();
+            }
+            setPaused(!isPaused);
         }
-        setPaused(!isPaused);
     };
 
     // Activer/désactiver le mode boucle
@@ -71,6 +84,44 @@ const PlayerMusic = ({URLMusic, titleMusic, titleAlbum, nameArtist, cover}) => {
         setVolume(value);
     }
 
+    const nextMusic = () => {
+        if (Object.keys(musicSelected).length === 0) {
+            alert("Aucune musique sélectionnée");
+        } else {
+            const indexCurrentMusic = pistes.findIndex((piste) => piste.id === musicSelected.id);
+            let piste = indexCurrentMusic === pistes.length - 1 ? pistes[0] : pistes[indexCurrentMusic + 1];
+
+            if (URLMusic) {
+                URL.revokeObjectURL(URLMusic);
+            }
+            const url = URL.createObjectURL(piste.mp3File);
+            const cover = piste.coverUrl ? piste.coverUrl : null;
+
+            setMusicSelected(piste);
+            setCover(cover);
+            setURLMusic(url);
+        }
+    }
+
+    const previousMusic = () => {
+        if (Object.keys(musicSelected).length === 0) {
+            alert("Aucune musique sélectionnée");
+        } else {
+            const indexCurrentMusic = pistes.findIndex((piste) => piste.id === musicSelected.id);
+            const piste = indexCurrentMusic === 0 ? pistes[pistes.length - 1] : pistes[indexCurrentMusic - 1];
+
+            if (URLMusic) {
+                URL.revokeObjectURL(URLMusic);
+            }
+            const url = URL.createObjectURL(piste.mp3File);
+            const cover = piste.coverUrl ? piste.coverUrl : null;
+
+            setMusicSelected(piste);
+            setCover(cover);
+            setURLMusic(url);
+        }
+    }
+
     return (
         <div className="flex flex-col w-full shadow z-40">
             {/* Slider */}
@@ -91,7 +142,7 @@ const PlayerMusic = ({URLMusic, titleMusic, titleAlbum, nameArtist, cover}) => {
             {/* Boutons du lecteur */}
             <div className="flex bg-[#A33634] px-4 py-2">
                 <div className="grid grid-cols-3 w-full">
-                    {/* Affichage temps */}
+                    {/* Affichage informations lecture */}
                     <div className="flex justify-start h-full items-center flex-wrap ">
                         {cover ? (
                             <Image
@@ -103,12 +154,13 @@ const PlayerMusic = ({URLMusic, titleMusic, titleAlbum, nameArtist, cover}) => {
                                 shadow="sm"
                                 className="bg-warning"
                             />
-                            ) : (
-                                <div className="bg-warning rounded-lg h-[84px] aspect-square flex justify-center items-center text-[32pt] font-semibold">{titleMusic && titleMusic[0].toUpperCase()}</div>
-                            )
+                        ) : (
+                            <div className="bg-warning rounded-lg h-[84px] aspect-square flex justify-center items-center text-[32pt] font-semibold">{musicSelected.title && musicSelected.title[0].toUpperCase()}</div>
+                        )
                         }
                         <div className="md:ms-4 text-nowrap flex flex-col">
-                            <span className="mb-2 text-warning-500 font-semibold">{titleMusic}</span>
+                            <span className="text-warning-500 font-semibold">{musicSelected.title}</span>
+                            <span className="text-sm text-warning-500 mb-2">{musicSelected.albumTitle} - {musicSelected.artistName}</span>
                             {formatTime(currentTime)} / {duration > 0 ? formatTime(duration) : "--:--"}
                         </div>
                     </div>
@@ -119,6 +171,7 @@ const PlayerMusic = ({URLMusic, titleMusic, titleAlbum, nameArtist, cover}) => {
                             className="rounded-full bg-transparant"
                             disableRipple={false}
                             disableAnimation={true}
+                            onClick={previousMusic}
                         >
                             <FontAwesomeIcon icon={faBackwardStep} size="xl" />
                         </Button>
@@ -129,13 +182,14 @@ const PlayerMusic = ({URLMusic, titleMusic, titleAlbum, nameArtist, cover}) => {
                             disableRipple={false}
                             disableAnimation={true}
                         >
-                            {isPaused ? <FontAwesomeIcon icon={faPause} size="xl" /> : <FontAwesomeIcon icon={faPlay} size="xl"/>}
+                            {isPaused ? <FontAwesomeIcon icon={faPause} size="xl" /> : <FontAwesomeIcon icon={faPlay} size="xl" />}
                         </Button>
                         <Button
                             isIconOnly
                             className="rounded-full bg-transparant"
                             disableRipple={false}
                             disableAnimation={true}
+                            onClick={nextMusic}
                         >
                             <FontAwesomeIcon icon={faForwardStep} size="xl" />
                         </Button>
@@ -143,7 +197,7 @@ const PlayerMusic = ({URLMusic, titleMusic, titleAlbum, nameArtist, cover}) => {
                     {/* Bouton boucle */}
                     <div className="flex justify-end items-center">
                         <Button isIconOnly className="bg-transparent" onClick={toggleRepeat}>
-                              <FontAwesomeIcon icon={faRepeat} 
+                            <FontAwesomeIcon icon={faRepeat}
                                 className={isRepeated ? "text-warning" : ""}
                                 title={isRepeated ? "Mode boucle" : "Mode simple"}
                                 size="xl"
