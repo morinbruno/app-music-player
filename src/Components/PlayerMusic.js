@@ -91,9 +91,7 @@ const PlayerMusic = ({ URLMusic, setURLMusic, cover, setCover, musicSelected, pi
             const indexCurrentMusic = pistes.findIndex((piste) => piste.id === musicSelected.id);
             let piste = indexCurrentMusic === pistes.length - 1 ? pistes[0] : pistes[indexCurrentMusic + 1];
 
-            if (URLMusic) {
-                URL.revokeObjectURL(URLMusic);
-            }
+            URLMusic && URL.revokeObjectURL(URLMusic);
             const url = URL.createObjectURL(piste.mp3File);
             const cover = piste.coverUrl ? piste.coverUrl : null;
 
@@ -110,9 +108,7 @@ const PlayerMusic = ({ URLMusic, setURLMusic, cover, setCover, musicSelected, pi
             const indexCurrentMusic = pistes.findIndex((piste) => piste.id === musicSelected.id);
             const piste = indexCurrentMusic === 0 ? pistes[pistes.length - 1] : pistes[indexCurrentMusic - 1];
 
-            if (URLMusic) {
-                URL.revokeObjectURL(URLMusic);
-            }
+            URLMusic && URL.revokeObjectURL(URLMusic);
             const url = URL.createObjectURL(piste.mp3File);
             const cover = piste.coverUrl ? piste.coverUrl : null;
 
