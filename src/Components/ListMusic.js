@@ -77,7 +77,7 @@ const ListMusic = ({ openAddMenu, pistes, setCover, cover, setURLMusic, URLMusic
                                     src={piste.coverUrl}
                                     title={piste.title}
                                     alt={""}
-                                    className="absolute top-0 left-0 w-full h-full object-cover blur-md "
+                                    className="absolute top-0 left-0 w-full h-full object-cover blur-md"
                                 />
                                 {piste.coverUrl ?
                                     <div className='me-2 overflow-hidden aspect-square'>
