@@ -10,6 +10,7 @@ const ListMusic = ({ openAddMenu, pistes, setCover, setURLMusic, URLMusic, setMu
         const cover = result.coverUrl ? result.coverUrl : null;
 
         console.log("Musique sélectionnée :", result);
+        document.title = result.title + " - " + result.artistName;
         setMusicSelected(result);
         setCover(cover);
         setURLMusic(url);
