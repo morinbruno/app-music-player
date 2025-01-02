@@ -3,6 +3,8 @@ const API = {
     pistes: []
 }
 
+const baseURL = "https://musicbrainz.org/ws/2"
+
 const config = {
     headers: {
         Accept: "application/json"

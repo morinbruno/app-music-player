@@ -94,6 +94,7 @@ const PlayerMusic = ({ URLMusic, setURLMusic, cover, setCover, musicSelected, pi
             URLMusic && URL.revokeObjectURL(URLMusic);
             const url = URL.createObjectURL(piste.mp3File);
             const cover = piste.coverUrl ? piste.coverUrl : null;
+            document.title = piste.title + " - " + piste.artistName;
 
             setMusicSelected(piste);
             setCover(cover);
@@ -111,6 +112,7 @@ const PlayerMusic = ({ URLMusic, setURLMusic, cover, setCover, musicSelected, pi
             URLMusic && URL.revokeObjectURL(URLMusic);
             const url = URL.createObjectURL(piste.mp3File);
             const cover = piste.coverUrl ? piste.coverUrl : null;
+            document.title = piste.title + " - " + piste.artistName;
 
             setMusicSelected(piste);
             setCover(cover);
@@ -218,7 +220,13 @@ const PlayerMusic = ({ URLMusic, setURLMusic, cover, setCover, musicSelected, pi
                 </div>
             </div>
             {/* Lecteur audio */}
-            <audio ref={audioRef} src={URLMusic} preload="metadata" />
+            <audio 
+                ref={audioRef} 
+                src={URLMusic} 
+                preload="metadata" 
+                onPause={() => {setPaused(false)}} 
+                onPlay={() => {setPaused(true)}} 
+            />
         </div>
     );
 };
