@@ -226,6 +226,7 @@ const PlayerMusic = ({ URLMusic, setURLMusic, cover, setCover, musicSelected, pi
                 preload="metadata" 
                 onPause={() => {setPaused(false)}} 
                 onPlay={() => {setPaused(true)}} 
+                onEnded={nextMusic}
             />
         </div>
     );
