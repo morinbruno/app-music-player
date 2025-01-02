@@ -9,7 +9,7 @@ function App() {
   const [URLMusic, setURLMusic] = useState("");
   const [pistes, setPistes] = useState([]);
   const [cover, setCover] = useState("");
-  const [titleMusic, setTitleMusic] = useState("");
+  const [musicSelected, setMusicSelected] = useState({});
 
   useEffect(() => {
     (async () => {
@@ -46,9 +46,9 @@ function App() {
     <div className="flex flex-col justify-between items-center h-full w-full bg-gradient-to-br from-[#A33634] to-[#424290]">
       <AddMenu URLMusic={URLMusic} setURLMusic={setURLMusic} hideAddMenu={hideAddMenu} setPistes={setPistes} />
       <div className="grid grid-rows-1 w-full h-full">
-        <ListMusic openAddMenu={openAddMenu} pistes={pistes} URLMusic={URLMusic} setURLMusic={setURLMusic} setCover={setCover} setTitleMusic={setTitleMusic} />
+        <ListMusic openAddMenu={openAddMenu} pistes={pistes} URLMusic={URLMusic} setURLMusic={setURLMusic} setCover={setCover} setMusicSelected={setMusicSelected} />
       </div>
-      <PlayerMusic URLMusic={URLMusic} setURLMusic={setURLMusic} cover={cover} titleMusic={titleMusic} />
+      <PlayerMusic URLMusic={URLMusic} setURLMusic={setURLMusic} cover={cover} setCover={setCover} musicSelected={musicSelected} setMusicSelected={setMusicSelected} pistes={pistes}/>
     </div>
   );
 }
