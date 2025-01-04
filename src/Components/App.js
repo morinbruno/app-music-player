@@ -1,6 +1,7 @@
 import PlayerMusic from "./PlayerMusic.js";
 import ListMusic from "./ListMusic.js";
 import AddMenu from "./AddMenu.js";
+import InfoMenu from "./InfoMenu.js";
 import { useState, useEffect } from "react";
 import { getAllSongs, openDB } from "../models/dbIndexed";
 import { API } from "../models/api";
@@ -11,6 +12,7 @@ function App() {
   const [cover, setCover] = useState("");
   const [musicSelected, setMusicSelected] = useState({});
 
+  // Récupérer des musiques depuis la base de données
   useEffect(() => {
     (async () => {
       try {
@@ -30,14 +32,14 @@ function App() {
     })();
   }, []);
 
-  function openAddMenu(){
+  function openAddMenu() {
     const addMenu = document.getElementById("addMenu");
     addMenu.classList.replace("hidden", "flex");
   }
 
-  function hideAddMenu(e){
+  function hideAddMenu(e) {
     const addMenu = document.getElementById("addMenu");
-    if(e.target.id === "addMenu"){
+    if (e.target.id === "addMenu") {
       addMenu.classList.replace("flex", "hidden");
     }
   }
@@ -45,10 +47,11 @@ function App() {
   return (
     <div className="flex flex-col justify-between items-center h-full w-full">
       <AddMenu URLMusic={URLMusic} setURLMusic={setURLMusic} hideAddMenu={hideAddMenu} setPistes={setPistes} />
+      <InfoMenu />
       <div className="grid grid-rows-1 w-full h-full">
-        <ListMusic openAddMenu={openAddMenu} pistes={pistes} URLMusic={URLMusic} setURLMusic={setURLMusic} setCover={setCover} cover={cover} setMusicSelected={setMusicSelected} />
+        <ListMusic openAddMenu={openAddMenu} setPistes={setPistes} pistes={pistes} URLMusic={URLMusic} setURLMusic={setURLMusic} setCover={setCover} cover={cover} setMusicSelected={setMusicSelected} />
       </div>
-      <PlayerMusic URLMusic={URLMusic} setURLMusic={setURLMusic} cover={cover} setCover={setCover} musicSelected={musicSelected} setMusicSelected={setMusicSelected} pistes={pistes}/>
+      <PlayerMusic URLMusic={URLMusic} setURLMusic={setURLMusic} cover={cover} setCover={setCover} musicSelected={musicSelected} setMusicSelected={setMusicSelected} pistes={pistes} />
     </div>
   );
 }
