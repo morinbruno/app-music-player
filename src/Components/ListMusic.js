@@ -1,10 +1,31 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMusic, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { ScrollShadow, Button, Image } from "@nextui-org/react";
-import { useEffect } from "react";
+import { 
+    faMusic, 
+    faPlus, 
+    faEllipsisVertical, 
+    faTrash ,
+    faCircleInfo
+} from "@fortawesome/free-solid-svg-icons";
+import {
+    ScrollShadow,
+    Button,
+    Image,
+    Dropdown,
+    DropdownTrigger,
+    DropdownMenu,
+    DropdownSection,
+    DropdownItem
+} from "@nextui-org/react";
+import { useEffect,useState } from "react";
 import { Vibrant } from "node-vibrant/browser";
+import { 
+    openDB, 
+    deleteSong, 
+    getAllSongs 
+} from "../models/dbIndexed";
+import { API } from "../models/api";
 
-const ListMusic = ({ openAddMenu, pistes, setCover, cover, setURLMusic, URLMusic, setMusicSelected }) => {
+const ListMusic = ({ openAddMenu, setPistes, pistes, setCover, cover, setURLMusic, URLMusic, setMusicSelected }) => {  
     const selectTrack = async (id) => {
         const result = pistes.find((piste) => piste.id === id)
         URLMusic && URL.revokeObjectURL(URLMusic);
@@ -23,33 +44,63 @@ const ListMusic = ({ openAddMenu, pistes, setCover, cover, setURLMusic, URLMusic
         (async () => {
             const listMusic = document.getElementById("listMusic");
             const playerMusic = document.getElementById("playerMusic");
-            if(cover) {
+            if (cover) {
                 Vibrant.from(cover).getPalette()
-                .then(palette => {
-                    const dominantColor = palette.Vibrant.rgb;
-                    const gradient = `linear-gradient(to bottom right, rgb(${dominantColor.join(',')}), rgb(${palette.Muted.rgb.join(',')}))`;
-                    console.log("Dégradé CSS :", gradient);
-                    listMusic.style.background = gradient;
-                    playerMusic.style.backgroundColor = `rgb(${palette.DarkVibrant.rgb.join(',')})`;
-                })
-                .catch(err => {
-                    console.error("Erreur :", err);
-                });
+                    .then(palette => {
+                        const dominantColor = palette.Vibrant.rgb;
+                        const gradient = `linear-gradient(to bottom right, rgb(${dominantColor.join(',')}), rgb(${palette.Muted.rgb.join(',')}))`;
+                        console.log("Dégradé CSS :", gradient);
+                        listMusic.style.background = gradient;
+                        playerMusic.style.backgroundColor = `rgb(${palette.DarkVibrant.rgb.join(',')})`;
+                    })
+                    .catch(err => {
+                        console.error("Erreur :", err);
+                    });
             }
         })();
     }, [cover]);
 
+    const deleteTrack = async (id) => {
+        openDB();
+        deleteSong(id)
+            .then(() => {
+                console.log("Musique supprimer avec succès");
+            })
+            .catch((error) => {
+                console.error("Erreur lors de la supression de la musique :", error);
+            });
+
+        API.pistes = await getAllSongs();
+        setPistes(API.pistes);
+        console.log(API.pistes);
+    }
+
+    function openInfoMenu() {
+        const infoMenu = document.getElementById("infoMenu");
+        infoMenu.classList.replace("hidden", "flex");
+    }
+
     return (
         <div className="px-4 py-3 flex flex-col flex-1 bg-gradient-to-br from-[#A33634] to-[#6e5352] bg-opacity-70" id="listMusic">
-            <div className="text-xl border-b-2 border-warning pb-2 inline-flex items-center mb-3">
+            <div className="text-xl border-b-2 border-warning pb-2 flex justify-between items-center mb-3">
                 <h1 className=""><FontAwesomeIcon icon={faMusic} className="me-2" />Bibliothèque musical</h1>
-                <Button
-                    color="warning"
-                    className="ms-auto"
-                    onClick={openAddMenu}
-                >
-                    Ajouter un titre <FontAwesomeIcon icon={faPlus} />
-                </Button>
+                <div className="flex gap-3">
+                    <Button
+                        color="warning"
+                        className="ms-auto"
+                        onClick={openAddMenu}
+                    >
+                        Ajouter un titre <FontAwesomeIcon icon={faPlus} />
+                    </Button>
+                    <Button
+                        isIconOnly={true}
+                        color="warning"
+                        title="Informations sur la bibliothèque musicale"
+                        onClick={openInfoMenu}
+                    >
+                        <FontAwesomeIcon icon={faCircleInfo} size="lg" />
+                    </Button>
+                </div>
             </div>
             <div className="relative h-full">
                 <ScrollShadow
@@ -106,6 +157,32 @@ const ListMusic = ({ openAddMenu, pistes, setCover, cover, setURLMusic, URLMusic
                                     >
                                         {piste.artistName}
                                     </h2>
+                                </div>
+                                <div>
+                                    <Dropdown className="border-warning border-2">
+                                        <DropdownTrigger>
+                                            <Button
+                                                isIconOnly={true}
+                                                className="bg-transparent text-warning"
+                                            >
+                                                <FontAwesomeIcon icon={faEllipsisVertical} size="lg" />
+                                            </Button>
+                                        </DropdownTrigger>
+                                        <DropdownMenu>
+                                            <DropdownSection title="Actions">
+                                                <DropdownItem
+                                                    key={`delete-${piste.id}`}
+                                                    className="text-danger"
+                                                    color="danger"
+                                                    description="Supprimer ce titre de votre bibliothèque"
+                                                    startContent={<FontAwesomeIcon icon={faTrash} />}
+                                                    onClick={() => { deleteTrack(piste.id) }}
+                                                >
+                                                    Supprimer
+                                                </DropdownItem>
+                                            </DropdownSection>
+                                        </DropdownMenu>
+                                    </Dropdown>
                                 </div>
                             </div>
                         ))}
