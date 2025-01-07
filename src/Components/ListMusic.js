@@ -16,7 +16,7 @@ import {
     DropdownSection,
     DropdownItem
 } from "@nextui-org/react";
-import { useEffect,useState } from "react";
+import { useEffect } from "react";
 import { Vibrant } from "node-vibrant/browser";
 import { 
     openDB, 
@@ -25,7 +25,7 @@ import {
 } from "../models/dbIndexed";
 import { API } from "../models/api";
 
-const ListMusic = ({ openAddMenu, setPistes, pistes, setCover, cover, setURLMusic, URLMusic, setMusicSelected }) => {  
+const ListMusic = ({ openAddMenu, setPistes, pistes, setCover, cover, setURLMusic, URLMusic, setMusicSelected, musicSelected }) => {  
     const selectTrack = async (id) => {
         const result = pistes.find((piste) => piste.id === id)
         URLMusic && URL.revokeObjectURL(URLMusic);
@@ -61,18 +61,24 @@ const ListMusic = ({ openAddMenu, setPistes, pistes, setCover, cover, setURLMusi
     }, [cover]);
 
     const deleteTrack = async (id) => {
-        openDB();
-        deleteSong(id)
-            .then(() => {
-                console.log("Musique supprimer avec succès");
-            })
-            .catch((error) => {
-                console.error("Erreur lors de la supression de la musique :", error);
-            });
+        console.log(musicSelected);
+        if(musicSelected.id !== id) {
 
-        API.pistes = await getAllSongs();
-        setPistes(API.pistes);
-        console.log(API.pistes);
+            openDB();
+            deleteSong(id)
+                .then(() => {
+                    console.log("Musique supprimer avec succès");
+                })
+                .catch((error) => {
+                    console.error("Erreur lors de la supression de la musique :", error);
+                });
+    
+            API.pistes = await getAllSongs();
+            setPistes(API.pistes);
+            console.log(API.pistes);
+        } else {
+            alert("Vous ne pouvez pas supprimer une musique en cours de lecture");
+        }
     }
 
     function openInfoMenu() {
@@ -148,7 +154,7 @@ const ListMusic = ({ openAddMenu, setPistes, pistes, setCover, cover, setURLMusi
                                     className='flex flex-col flex-1 justify-center z-10'
                                 >
                                     <h1
-                                        className='text-lg font-bold mb-2'
+                                        className='text-lg font-bold mb-2 text-warning' style={{ textShadow: "1px 1px 2px rgba(0,0,0,0.5)" }}
                                     >
                                         {piste.title} - {piste.albumTitle}
                                     </h1>

@@ -49,7 +49,7 @@ function App() {
       <AddMenu URLMusic={URLMusic} setURLMusic={setURLMusic} hideAddMenu={hideAddMenu} setPistes={setPistes} />
       <InfoMenu />
       <div className="grid grid-rows-1 w-full h-full">
-        <ListMusic openAddMenu={openAddMenu} setPistes={setPistes} pistes={pistes} URLMusic={URLMusic} setURLMusic={setURLMusic} setCover={setCover} cover={cover} setMusicSelected={setMusicSelected} />
+        <ListMusic openAddMenu={openAddMenu} setPistes={setPistes} pistes={pistes} URLMusic={URLMusic} setURLMusic={setURLMusic} setCover={setCover} cover={cover} setMusicSelected={setMusicSelected} musicSelected={musicSelected} />
       </div>
       <PlayerMusic URLMusic={URLMusic} setURLMusic={setURLMusic} cover={cover} setCover={setCover} musicSelected={musicSelected} setMusicSelected={setMusicSelected} pistes={pistes} />
     </div>
