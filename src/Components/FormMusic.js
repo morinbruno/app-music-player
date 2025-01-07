@@ -4,7 +4,7 @@ const FormMusic = ({title, setTitle, artist, setArtist, album, mp3File, setAlbum
 
     const handleMusic = (e) => {
         const file = e.target.files[0];
-        if (file && file.type === "audio/mpeg") {
+        if (file && file.type === "audio/mpeg" && file.size <= 15000000) {
             setMp3File(file);
           } else {
             alert("Veuillez sélectionner un fichier MP3 valide.");
@@ -13,9 +13,7 @@ const FormMusic = ({title, setTitle, artist, setArtist, album, mp3File, setAlbum
 
     const handleTitle = (e) => {
         const titleValue = e.target.value;
-        if(/\d/.test(titleValue)){
-            alert("Le titre de la musique ne doit pas contenir de chiffres.");
-        } else if(titleValue.length > 50){
+        if(titleValue.length > 50){
             alert("Le titre de la musique ne doit pas dépasser 50 caractères.");
         } else {
             setTitle(titleValue);
@@ -24,9 +22,7 @@ const FormMusic = ({title, setTitle, artist, setArtist, album, mp3File, setAlbum
 
     const handleAlbum = (e) => {
         const albumValue = e.target.value;
-        if(/\d/.test(albumValue)){
-            alert("Le titre de l'album ne doit pas contenir de chiffres.");
-        } else if(albumValue.length > 50){
+        if(albumValue.length > 50){
             alert("Le titre de l'album ne doit pas dépasser 50 caractères.");
         } else {
             setAlbum(albumValue);
@@ -35,9 +31,7 @@ const FormMusic = ({title, setTitle, artist, setArtist, album, mp3File, setAlbum
 
     const handleArtist = (e) => {
         const artistValue = e.target.value;
-        if(/\d/.test(artistValue)){
-            alert("Le nom de l'artist ne doit pas contenir de chiffres.");
-        } else if(artistValue.length > 50){
+        if(artistValue.length > 50){
             alert("Le nom de l'artist ne doit pas dépasser 50 caractères.");
         } else {
             setArtist(artistValue);
@@ -79,7 +73,7 @@ const FormMusic = ({title, setTitle, artist, setArtist, album, mp3File, setAlbum
                     <Input 
                         color="warning"
                         type="file"
-                        description="Format MP3"
+                        description="Format MP3 et poid égal/inférieur à 15 Mo"
                         classNames={{
                             description: "text-white"
                         }}
