@@ -3,38 +3,28 @@ const API = {
     pistes: []
 }
 
-const config = {
-    headers: {
-        Accept: "application/json"
-    },
-    mode: "cors",
-    method: "GET",
-    referrerPolicy: "strict-origin-when-cross-origin",
-    redirect: "follow"
-};
-
 API.getAlbum = async (nameAbulm, nameArtist) => {
-    const reponse = await fetch(`${API.baseURL}/release/?query=artist:${nameArtist} AND release:"${nameAbulm}"&inc=artists+collections+labels+recordings+release-groups&fmt=json`, config);
+    const reponse = await fetch(`${API.baseURL}/release/?query=artist:${nameArtist} AND release:"${nameAbulm}"&inc=artists+collections+labels+recordings+release-groups&fmt=json`);
     const data = await reponse.json();
     return data.releases;
 }
 
 API.getAlbumId = async (nameAbulm, nameArtist) => {
-    const reponse = await fetch(`${API.baseURL}/release/?query=artist:${nameArtist} AND release:"${nameAbulm}"&inc=artists+collections+labels+recordings+release-groups&fmt=json`, config);
+    const reponse = await fetch(`${API.baseURL}/release/?query=artist:${nameArtist} AND release:"${nameAbulm}"&inc=artists+collections+labels+recordings+release-groups&fmt=json`);
     const data = await reponse.json();
     return data.releases[0].id;
 }
 
 // Renvoie les informations d'un album par son ID.
 API.getAlbumInfo = async (albumId) => {
-    const reponse = await fetch(`${API.baseURL}/release/${albumId}?inc=artists+collections+labels+recordings+release-groups%2Bmedia&fmt=json`, config);
+    const reponse = await fetch(`${API.baseURL}/release/${albumId}?inc=artists+collections+labels+recordings+release-groups%2Bmedia&fmt=json`);
     const data = await reponse.json();
     return data;
 }
 
 API.getAlbumCover = async (albumId) => {
     try {
-        const reponse = await fetch(`https://coverartarchive.org/release/${albumId}`, config);
+        const reponse = await fetch(`https://coverartarchive.org/release/${albumId}`);
         
         if(!reponse.ok) throw new Error("Cover non trouvé")
 

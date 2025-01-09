@@ -9,8 +9,41 @@ const PlayerMusic = ({ URLMusic, setURLMusic, cover, setCover, musicSelected, pi
     const [duration, setDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
     const [volume, setVolume] = useState(1)
+    const [sliderValue, setSliderValue] = useState(0); // État temporaire pour le slider
+    const [isDragging, setIsDragging] = useState(false); // État pour savoir si l'utilisateur manipule le slider
 
     const audioRef = useRef(null); // Utilisation de useRef pour le lecteur audio
+
+
+    // Fonction appelée pendant que l'utilisateur déplace le slider
+    const handleSliderChange = (value) => {
+        setSliderValue(value);
+        setIsDragging(true);
+    };
+
+    // Fonction appelée lorsque l'utilisateur relâche le slider
+    const handleSliderChangeEnd = (value) => {
+        const audio = audioRef.current;
+        audio.currentTime = value; // Applique la nouvelle position au lecteur audio
+        setCurrentTime(value); // Met à jour l'état actuel
+        setSliderValue(value); // Assurez-vous que le slider reste à la bonne position
+        setIsDragging(false); // L'utilisateur a terminé de manipuler le slider
+    };
+
+    // Met à jour le slider lorsque la musique joue, sauf si l'utilisateur est en train de le manipuler
+    useEffect(() => {
+        const audio = audioRef.current;
+
+        const interval = setInterval(() => {
+            if (!isDragging && !audio.paused) {
+                setCurrentTime(audio.currentTime);
+                setSliderValue(audio.currentTime);
+            }
+        }, 500); // Mise à jour toutes les 500ms
+
+        return () => clearInterval(interval);
+    }, [isDragging]);
+
 
     // Met à jour la durée totale et gère le temps actuel
     useEffect(() => {
@@ -50,7 +83,7 @@ const PlayerMusic = ({ URLMusic, setURLMusic, cover, setCover, musicSelected, pi
 
     // Lecture et pause de la musique
     const togglePlayPause = () => {
-        if(Object.keys(musicSelected).length === 0){
+        if (Object.keys(musicSelected).length === 0) {
             alert("Aucune musique sélectionnée");
         } else {
             const audio = audioRef.current;
@@ -69,13 +102,6 @@ const PlayerMusic = ({ URLMusic, setURLMusic, cover, setCover, musicSelected, pi
         const audio = audioRef.current;
         audio.loop = !isRepeated;
         setRepeated(!isRepeated);
-    };
-
-    // Mise à jour du slider
-    const updateSlider = (value) => {
-        const audio = audioRef.current;
-        audio.currentTime = value;
-        setCurrentTime(value);
     };
 
     const updateVolume = (value) => {
@@ -127,21 +153,23 @@ const PlayerMusic = ({ URLMusic, setURLMusic, cover, setCover, musicSelected, pi
                 aria-label="Music progress"
                 classNames={{
                     track: "bg-default-500/30 rounded-none m-0 cursor-pointer border-none",
-                    thumb: "w-4 h-4 after:w-4 after:h-4 after:bg-foreground opacity-0 hover:opacity-100 duration-100 hover:duration-100",
+                    thumb: "w-2 h-2 after:w-2 after:h-2 after:bg-foreground",
                 }}
                 color="warning"
                 size="sm"
-                value={currentTime}
+                value={sliderValue} // Affiche la position actuelle ou temporaire
                 minValue={0}
                 maxValue={duration}
-                onChangeEnd={updateSlider}
+                onChange={handleSliderChange} // Appelé lorsque l'utilisateur déplace le slider
+                onChangeEnd={handleSliderChangeEnd} // Appelé lorsque l'utilisateur relâche le slider
             />
+
 
             {/* Boutons du lecteur */}
             <div className="flex bg-[#A33634] px-4 py-2" id="playerMusic">
                 <div className="grid grid-cols-3 w-full">
                     {/* Affichage informations lecture */}
-                    <div className="flex justify-start h-full items-center flex-wrap ">
+                    <div className="flex justify-start h-full items-center flex-wrap">
                         {cover ? (
                             <Image
                                 src={cover}
@@ -220,12 +248,12 @@ const PlayerMusic = ({ URLMusic, setURLMusic, cover, setCover, musicSelected, pi
                 </div>
             </div>
             {/* Lecteur audio */}
-            <audio 
-                ref={audioRef} 
-                src={URLMusic} 
-                preload="metadata" 
-                onPause={() => {setPaused(false)}} 
-                onPlay={() => {setPaused(true)}} 
+            <audio
+                ref={audioRef}
+                src={URLMusic}
+                preload="metadata"
+                onPause={() => { setPaused(false) }}
+                onPlay={() => { setPaused(true) }}
                 onEnded={nextMusic}
             />
         </div>
