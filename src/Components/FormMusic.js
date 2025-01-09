@@ -1,6 +1,6 @@
 import {Input, Button} from "@nextui-org/react";
 
-const FormMusic = ({title, setTitle, artist, setArtist, album, mp3File, setAlbum, setMp3File, addMusic, cover}) => {
+const FormMusic = ({title, setTitle, artist, setArtist, album, mp3File, setAlbum, setMp3File, addMusic, cover, searchTrack}) => {
 
     const handleMusic = (e) => {
         const file = e.target.files[0];
@@ -80,6 +80,15 @@ const FormMusic = ({title, setTitle, artist, setArtist, album, mp3File, setAlbum
                         onChange={handleMusic}
                         id={"mp3File"}
                     />
+                </div>
+                <div className="mb-4">
+                    <Button
+                        color="warning"
+                        className="w-full"
+                        onClick={searchTrack}
+                    >
+                        Rechercher
+                    </Button>
                 </div>
                 <div>
                     <Button

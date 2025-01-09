@@ -1,6 +1,7 @@
 import { Image, ScrollShadow } from '@nextui-org/react';
 import { API } from '../models/api';
 import { useCallback } from 'react';
+import { Spinner } from '@nextui-org/react'
 
 const SelectAlbumSearch = ({ albums, setCover }) => {
     const selectAlbum = useCallback(async (e, id) => {
@@ -27,9 +28,14 @@ const SelectAlbumSearch = ({ albums, setCover }) => {
         <div className="border-2 bg-[#A33634] rounded-lg shadow-lg border-warning p-5 overflow-hidden flex flex-col h-full">
             <h1 className='mb-4 text-xl'>Résultat de la recherche</h1>
             <div className='relative h-full'>
+                <div className='hidden justify-center items-center gap-5 mb-5' id="loadingSearchAlbums">
+                    <Spinner color="warning" /> Recherche en cours...
+                </div>
                 {!albums || albums.length === 0 ? (
-                    <div className="flex rounded-lg overflow-hidden mb-4 shadow-lg border-warning bg-warning font-mono text-lg border-2 cursor-pointer items-center justify-center" style={{height:100}} onClick={(e) => selectAlbum(e)} >
-                        Ajouter la musique sans recherche
+                    <div>
+                        <div className="flex rounded-lg overflow-hidden mb-4 shadow-lg border-warning bg-warning font-mono text-lg border-2 cursor-pointer items-center justify-center" style={{height:100}} onClick={(e) => selectAlbum(e)} >
+                            Ajouter la musique sans recherche
+                        </div>
                     </div>
                 ) : (
                     <ScrollShadow className="absolute h-full w-full top-0 bottom-0 overflow-auto" hideScrollBar={true} id={"listAlbums"}>
