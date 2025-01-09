@@ -3,7 +3,6 @@ import {
     faMusic, 
     faPlus, 
     faEllipsisVertical, 
-    faTrash ,
     faCircleInfo
 } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -24,6 +23,7 @@ import {
     getAllSongs 
 } from "../models/dbIndexed";
 import { API } from "../models/api";
+import { DeleteIcon } from "@nextui-org/shared-icons"
 
 const ListMusic = ({ openAddMenu, setPistes, pistes, setCover, cover, setURLMusic, URLMusic, setMusicSelected, musicSelected }) => {  
     const selectTrack = async (id) => {
@@ -181,7 +181,7 @@ const ListMusic = ({ openAddMenu, setPistes, pistes, setCover, cover, setURLMusi
                                                     className="text-danger"
                                                     color="danger"
                                                     description="Supprimer ce titre de votre bibliothèque"
-                                                    startContent={<FontAwesomeIcon icon={faTrash} />}
+                                                    startContent={<DeleteIcon className="size-5" />}
                                                     onClick={() => { deleteTrack(piste.id) }}
                                                 >
                                                     Supprimer
