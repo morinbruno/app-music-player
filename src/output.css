@@ -982,6 +982,21 @@ video {
   aspect-ratio: 1 / 1;
 }
 
+.size-5 {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.size-10 {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.size-6 {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 .\!h-auto {
   height: auto !important;
 }
@@ -3362,10 +3377,6 @@ video {
   transition-duration: 500ms !important;
 }
 
-.duration-100 {
-  transition-duration: 100ms;
-}
-
 .duration-150 {
   transition-duration: 150ms;
 }
@@ -4813,10 +4824,6 @@ video {
 
 .hover\:opacity-80:hover {
   opacity: 0.8;
-}
-
-.hover\:duration-100:hover {
-  transition-duration: 100ms;
 }
 
 .hover\:after\:bg-danger\/20:hover::after {
