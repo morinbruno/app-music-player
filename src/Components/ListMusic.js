@@ -160,7 +160,7 @@ const ListMusic = ({ openAddMenu, setPistes, pistes, setCover, cover, setURLMusi
                                     {piste.title} - {piste.albumTitle}
                                 </h1>
                                 <h2
-                                    className='text-sm font-semibold mb-2 capitalize'
+                                    className='text-sm font-semibold mb-2 capitalize' style={{ textShadow: "1px 1px 2px rgba(0,0,0,0.5)" }}
                                 >
                                     {piste.artistName}
                                 </h2>
