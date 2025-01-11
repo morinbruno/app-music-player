@@ -39,66 +39,70 @@ const FormMusic = ({title, setTitle, artist, setArtist, album, mp3File, setAlbum
     }
 
     return (
-        <div className="p-4 backdrop-blur border-2 bg-[#A33634] rounded-lg shadow-lg border-warning bg-opacity-70 h-full">
+        <div className="p-4 backdrop-blur border-2 bg-[#A33634] rounded-lg shadow-lg border-warning bg-opacity-70 flex flex-col h-full overflow-auto">
             <h1 className="mb-4 text-xl">Ajouter une musique à la bibliothèque</h1>
-            <form className="max-full">
-                <div className="mb-2">
-                    <Input 
-                        color="warning"
-                        type="text"
-                        label="Titre de la musique"
-                        value={title}
-                        onChange={handleTitle}
-                    />
-                </div>
-                <div className="mb-2">
-                    <Input 
-                        color="warning"
-                        type="text"
-                        label="Titre de l'album"
-                        value={album}
-                        onChange={handleAlbum}
-                    />
-                </div>
-                <div className="mb-4">
-                    <Input 
-                        color="warning"
-                        type="text"
-                        label="Nom de l'artiste"
-                        value={artist}
-                        onChange={handleArtist}
-                    />
-                </div>
-                <div className="mb-4">
-                    <Input 
-                        color="warning"
-                        type="file"
-                        description="Format MP3 et poid égal/inférieur à 15 Mo"
-                        classNames={{
-                            description: "text-white"
-                        }}
-                        onChange={handleMusic}
-                        id={"mp3File"}
-                    />
-                </div>
-                <div className="mb-4">
-                    <Button
-                        color="warning"
-                        className="w-full"
-                        onClick={searchTrack}
-                    >
-                        Rechercher
-                    </Button>
+            <form className="flex flex-col justify-between md:h-full">
+                <div>
+                    <div className="mb-2">
+                        <Input 
+                            color="warning"
+                            type="text"
+                            label="Titre de la musique"
+                            value={title}
+                            onChange={handleTitle}
+                        />
+                    </div>
+                    <div className="mb-2">
+                        <Input 
+                            color="warning"
+                            type="text"
+                            label="Titre de l'album"
+                            value={album}
+                            onChange={handleAlbum}
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <Input 
+                            color="warning"
+                            type="text"
+                            label="Nom de l'artiste"
+                            value={artist}
+                            onChange={handleArtist}
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <Input 
+                            color="warning"
+                            type="file"
+                            description="Format MP3 et poid égal/inférieur à 15 Mo"
+                            classNames={{
+                                description: "text-white"
+                            }}
+                            onChange={handleMusic}
+                            id={"mp3File"}
+                        />
+                    </div>
                 </div>
                 <div>
-                    <Button
-                        color="warning"
-                        className="w-full"
-                        onClick={addMusic}
-                        isDisabled={title === "" || album === "" || artist === "" || mp3File === "" || cover === ""}
-                    >
-                        Ajouter
-                    </Button>
+                    <div className="mb-4">
+                        <Button
+                            color="warning"
+                            className="w-full"
+                            onClick={searchTrack}
+                        >
+                            Rechercher
+                        </Button>
+                    </div>
+                    <div>
+                        <Button
+                            color="warning"
+                            className="w-full"
+                            onClick={addMusic}
+                            isDisabled={title === "" || album === "" || artist === "" || mp3File === "" || cover === ""}
+                        >
+                            Ajouter
+                        </Button>
+                    </div>
                 </div>
             </form>
         </div>

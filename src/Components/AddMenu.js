@@ -40,7 +40,7 @@ const AddMenu = ({ hideAddMenu, setPistes }) => {
             return matching;
           })
         );
-        if(albumsWithCovers.length === 0) {
+        if (albumsWithCovers.length === 0) {
           alert("Aucune correspondance de trouvée.")
         }
         loadingSearchAlbumsID.classList.replace('flex', 'hidden')
@@ -89,8 +89,8 @@ const AddMenu = ({ hideAddMenu, setPistes }) => {
 
   return (
     <div className="absolute h-screen w-screen z-50 bg-black bg-opacity-40 justify-center items-center hidden" id="addMenu" onClick={hideAddMenu}>
-      <div className="container">
-        <div className="grid grid-cols-1 lg:grid-cols-2 w-full gap-2 px-5">
+      <div className="container h-[60vh]">
+        <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-2 px-5 h-full">
           <FormMusic
             title={title}
             setTitle={setTitle}

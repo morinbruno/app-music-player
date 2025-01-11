@@ -45,10 +45,10 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col justify-between items-center h-full w-full">
+    <div className="flex flex-col justify-between items-center h-screen w-screen">
       <AddMenu URLMusic={URLMusic} setURLMusic={setURLMusic} hideAddMenu={hideAddMenu} setPistes={setPistes} />
       <InfoMenu />
-      <div className="grid grid-rows-1 w-full h-full">
+      <div className="w-full h-full bg-gradient-to-br from-[#A33634] to-[#6e5352] bg-opacity-70 overflow-hidden">
         <ListMusic openAddMenu={openAddMenu} setPistes={setPistes} pistes={pistes} URLMusic={URLMusic} setURLMusic={setURLMusic} setCover={setCover} cover={cover} setMusicSelected={setMusicSelected} musicSelected={musicSelected} />
       </div>
       <PlayerMusic URLMusic={URLMusic} setURLMusic={setURLMusic} cover={cover} setCover={setCover} musicSelected={musicSelected} setMusicSelected={setMusicSelected} pistes={pistes} />
