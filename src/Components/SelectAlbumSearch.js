@@ -1,29 +1,7 @@
 import { Image, ScrollShadow } from '@nextui-org/react';
-import { API } from '../models/api';
-import { useCallback } from 'react';
 import { Spinner } from '@nextui-org/react'
 
-const SelectAlbumSearch = ({ albums, setCover }) => {
-    const selectAlbum = useCallback(async (e, id) => {
-        const album = e.currentTarget;
-        const listAlbums = document.getElementById("listAlbums");
-        let cover = null;
-
-
-        if (!listAlbums) {
-            album.classList.replace("border-warning", "border-danger");
-        } else {
-            const listAlbumsChildren = listAlbums.children;
-            for (let i = 0; i < listAlbumsChildren.length; i++) {
-                listAlbumsChildren[i].classList.replace("border-danger", "border-warning");
-            }
-            album.classList.replace("border-warning", "border-danger");
-
-            cover = await API.getAlbumCover(id);
-        }
-        setCover(cover ? cover.image : null);
-    }, [setCover]);
-
+const SelectAlbumSearch = ({ albums, selectAlbum }) => {
     return (
         <div className="border-2 bg-[#A33634] rounded-lg shadow-lg border-warning p-5 overflow-auto flex flex-col h-full">
             <h1 className='mb-4 text-xl'>Résultat de la recherche</h1>

@@ -1,6 +1,6 @@
 import FormMusic from "./FormMusic";
 import SelectAlbumSearch from "./SelectAlbumSearch";
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { API } from "../models/api";
 import { openDB, addSong, getAllSongs } from "../models/dbIndexed";
 
@@ -12,6 +12,7 @@ const AddMenu = ({ hideAddMenu, setPistes }) => {
   const [mp3File, setMp3File] = useState("");
 
   const [albums, setAlbums] = useState([]);
+  const [albumIDSelected, setAlbumIDSelected] = useState()
 
   const searchTrack = async () => {
     const loadingSearchAlbumsID = document.getElementById('loadingSearchAlbums');
@@ -26,15 +27,15 @@ const AddMenu = ({ hideAddMenu, setPistes }) => {
         loadingSearchAlbumsID.classList.replace('hidden', 'flex')
         // Récupérer toutes les couvertures en parallèle
         const albumsWithCovers = await Promise.all(
-          await getAlbums.map(async (album) => {
-            let cover = await API.getAlbumCover(album.id);
+          await getAlbums.map(async (albm) => {
+            let cover = await API.getAlbumCover(albm.id);
             const matching = {
-              id: album.id,
+              id: albm.id,
               cover: cover,
-              title: album.title,
-              date: await API.getAlbumInfo(album.id).then((info) => info.date),
-              "artist-credit": album["artist-credit"],
-              tracks: await API.getAlbumInfo(album.id).then((info) => info.media[0].tracks.filter((track) => track.title.toLowerCase() === title.toLowerCase()))
+              title: albm.title,
+              date: await API.getAlbumInfo(albm.id).then((info) => info.date),
+              "artist-credit": albm["artist-credit"],
+              tracks: await API.getAlbumInfo(albm.id).then((info) => info.media[0].tracks.filter((track) => track.title.toLowerCase() === title.toLowerCase()))
             };
             if (!Array.isArray(matching.tracks)) matching.tracks = [matching.tracks];
             return matching;
@@ -59,9 +60,9 @@ const AddMenu = ({ hideAddMenu, setPistes }) => {
     const addMenu = document.getElementById("addMenu");
 
     const song = {
-      title: title,
-      albumTitle: album,
-      artistName: artist,
+      title: await API.getAlbumInfo(albumIDSelected).then((info) => info.media[0].tracks.find((track) => track.title.toLowerCase() === title.toLowerCase())).then((track) => track.title),
+      albumTitle: await API.getAlbumInfo(albumIDSelected).then((info) => info.title),
+      artistName: await API.getAlbumInfo(albumIDSelected).then((info) => info["artist-credit"][0].name),
       mp3File: new Blob([mp3File]),
       coverUrl: cover
     };
@@ -73,6 +74,7 @@ const AddMenu = ({ hideAddMenu, setPistes }) => {
         setCover("");
         setTitle("");
         setAlbum("");
+        setAlbums([])
         setArtist("");
         setMp3File("");
         inputMp3File.value = "";
@@ -86,6 +88,27 @@ const AddMenu = ({ hideAddMenu, setPistes }) => {
     setPistes(API.pistes);
     console.log(API.pistes);
   }
+
+  const selectAlbum = useCallback(async (e, idAlbum) => {
+    const album = e.currentTarget;
+    const listAlbums = document.getElementById("listAlbums");
+    let cover = null;
+
+    setAlbumIDSelected(idAlbum)
+
+    if (!listAlbums) {
+        album.classList.replace("border-warning", "border-danger");
+    } else {
+        const listAlbumsChildren = listAlbums.children;
+        for (let i = 0; i < listAlbumsChildren.length; i++) {
+            listAlbumsChildren[i].classList.replace("border-danger", "border-warning");
+        }
+        album.classList.replace("border-warning", "border-danger");
+
+        cover = await API.getAlbumCover(idAlbum);
+    }
+    setCover(cover ? cover.image : null);
+}, [setCover]);
 
   return (
     <div className="absolute h-screen w-screen z-50 bg-black bg-opacity-40 justify-center items-center hidden" id="addMenu" onClick={hideAddMenu}>
@@ -104,7 +127,7 @@ const AddMenu = ({ hideAddMenu, setPistes }) => {
             setMp3File={setMp3File}
             searchTrack={searchTrack}
           />
-          <SelectAlbumSearch albums={albums} setCover={setCover} />
+          <SelectAlbumSearch albums={albums} setCover={setCover} selectAlbum={selectAlbum} />
         </div>
       </div>
     </div>
