@@ -148,19 +148,26 @@ const ListMusic = ({ openAddMenu, setPistes, pistes, setCover, cover, setURLMusi
                                     />
                                 </div> :
                                 <div className="bg-warning me-2" >
-                                    <div className='flex justify-center items-center text-center text-[32pt] font-semibold bg-warning' style={{ height: "100px", width: "100px" }}>{piste.title[0].toUpperCase()}</div>
+                                    <div 
+                                        className='flex justify-center items-center text-center text-[32pt] font-semibold bg-warning' 
+                                        style={{ height: "100px", width: "100px" }}
+                                    >
+                                        {piste.title[0].toUpperCase()}
+                                    </div>
                                 </div>
                             }
                             <div
                                 className='flex flex-col flex-1 justify-center z-10'
                             >
                                 <h1
-                                    className='text-lg font-bold mb-2 text-warning' style={{ textShadow: "1px 1px 2px rgba(0,0,0,0.5)" }}
+                                    className='text-lg font-bold mb-2 text-warning' 
+                                    style={{ textShadow: "1px 1px 2px rgba(0,0,0,0.5)" }}
                                 >
                                     {piste.title} - {piste.albumTitle}
                                 </h1>
                                 <h2
-                                    className='text-sm font-semibold mb-2 capitalize' style={{ textShadow: "1px 1px 2px rgba(0,0,0,0.5)" }}
+                                    className='text-sm font-semibold mb-2 capitalize' 
+                                    style={{ textShadow: "1px 1px 2px rgba(0,0,0,0.5)" }}
                                 >
                                     {piste.artistName}
                                 </h2>
