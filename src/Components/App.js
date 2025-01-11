@@ -45,7 +45,7 @@ function App() {
   }
 
   return (
-    <div className="flex flex-col justify-between items-center h-screen w-screen">
+    <div className="flex flex-col justify-between items-center h-screen w-screen overflow-hidden">
       <AddMenu URLMusic={URLMusic} setURLMusic={setURLMusic} hideAddMenu={hideAddMenu} setPistes={setPistes} />
       <InfoMenu />
       <div className="w-full h-full bg-gradient-to-br from-[#A33634] to-[#6e5352] bg-opacity-70 overflow-hidden">
