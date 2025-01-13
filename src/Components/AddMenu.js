@@ -16,8 +16,9 @@ const AddMenu = ({ hideAddMenu, setPistes }) => {
 
   const searchTrack = async () => {
     const loadingSearchAlbumsID = document.getElementById('loadingSearchAlbums');
+    setCover()
 
-    if (artist.length === 0 || album.length === 0 || title.length === 0) {
+    if (!artist || !album || !title) {
       setAlbums([]);
       alert("Veuillez compléter le formulaire.")
     } else {
