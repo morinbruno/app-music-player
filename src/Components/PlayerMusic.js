@@ -186,7 +186,7 @@ const PlayerMusic = ({ URLMusic, setURLMusic, cover, setCover, musicSelected, pi
                         }
                         <div className="md:ms-4 text-nowrap flex flex-col">
                             <span className="text-warning-500 font-semibold">{musicSelected.title}</span>
-                            <span className="text-sm text-warning-500 mb-2">{musicSelected.albumTitle} - {musicSelected.artistName}</span>
+                            {Object.keys(musicSelected).length > 0 ? <span className="text-sm text-warning-500 mb-2">{musicSelected.albumTitle} - {musicSelected.artistName}</span> : ""}
                             {formatTime(currentTime)} / {duration > 0 ? formatTime(duration) : "--:--"}
                         </div>
                     </div>
