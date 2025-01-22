@@ -999,10 +999,6 @@ video {
   height: 0.375rem;
 }
 
-.h-1\/2 {
-  height: 50%;
-}
-
 .h-10 {
   height: 2.5rem;
 }
@@ -7910,6 +7906,10 @@ video {
 }
 
 @media (min-width: 1024px) {
+  .lg\:ms-4 {
+    margin-inline-start: 1rem;
+  }
+
   .lg\:grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
