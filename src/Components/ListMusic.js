@@ -115,7 +115,7 @@ const ListMusic = ({ openAddMenu, setPistes, pistes, setCover, cover, setURLMusi
                 }}
             >
                 <div
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                    className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4"
                 >
                     {pistes.length === 0 ? (
                         <div className="flex rounded-lg overflow-hidden mb-4 shadow-lg border-warning bg-warning font-mono select-none text-lg border-2 items-center justify-center" style={{ height: 100 }} >
