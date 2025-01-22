@@ -32,7 +32,6 @@ const ListMusic = ({ openAddMenu, setPistes, pistes, setCover, cover, setURLMusi
         const url = URL.createObjectURL(result.mp3File);
         const cover = result.coverUrl ? result.coverUrl : null;
 
-        console.log("Musique sélectionnée :", result);
         document.title = result.title + " - " + result.artistName;
         setMusicSelected(result);
         setCover(cover);
@@ -49,7 +48,6 @@ const ListMusic = ({ openAddMenu, setPistes, pistes, setCover, cover, setURLMusi
                     .then(palette => {
                         const dominantColor = palette.Vibrant.rgb;
                         const gradient = `linear-gradient(to bottom right, rgb(${dominantColor.join(',')}), rgb(${palette.Muted.rgb.join(',')}))`;
-                        console.log("Dégradé CSS :", gradient);
                         listMusic.style.background = gradient;
                         playerMusic.style.backgroundColor = `rgb(${palette.DarkVibrant.rgb.join(',')})`;
                     })
@@ -61,7 +59,6 @@ const ListMusic = ({ openAddMenu, setPistes, pistes, setCover, cover, setURLMusi
     }, [cover]);
 
     const deleteTrack = async (id) => {
-        console.log(musicSelected);
         if (musicSelected.id !== id) {
 
             openDB();
@@ -75,7 +72,6 @@ const ListMusic = ({ openAddMenu, setPistes, pistes, setCover, cover, setURLMusi
 
             API.pistes = await getAllSongs();
             setPistes(API.pistes);
-            console.log(API.pistes);
         } else {
             alert("Vous ne pouvez pas supprimer une musique en cours de lecture");
         }

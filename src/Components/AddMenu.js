@@ -87,7 +87,6 @@ const AddMenu = ({ hideAddMenu, setPistes }) => {
 
     API.pistes = await getAllSongs();
     setPistes(API.pistes);
-    console.log(API.pistes);
   }
 
   const selectAlbum = useCallback(async (e, idAlbum) => {
