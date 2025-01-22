@@ -98,7 +98,7 @@ const FormMusic = ({title, setTitle, artist, setArtist, album, mp3File, setAlbum
                             color="warning"
                             className="w-full"
                             onClick={addMusic}
-                            isDisabled={title === "" || album === "" || artist === "" || mp3File === "" || !cover}
+                            isDisabled={title === "" || album === "" || artist === "" || mp3File === "" || (!cover && cover !== null)}
                         >
                             Ajouter
                         </Button>
