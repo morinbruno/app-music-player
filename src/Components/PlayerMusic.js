@@ -115,7 +115,7 @@ const PlayerMusic = ({ URLMusic, setURLMusic, cover, setCover, musicSelected, pi
             alert("Aucune musique sélectionnée");
         } else {
             const indexCurrentMusic = pistes.findIndex((piste) => piste.id === musicSelected.id);
-            let piste = indexCurrentMusic === pistes.length - 1 ? pistes[0] : pistes[indexCurrentMusic + 1];
+            const piste = indexCurrentMusic === pistes.length - 1 ? pistes[0] : pistes[indexCurrentMusic + 1];
 
             URLMusic && URL.revokeObjectURL(URLMusic);
             const url = URL.createObjectURL(piste.mp3File);
