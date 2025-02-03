@@ -1,4 +1,4 @@
-import { Slider, Button, Image } from "@nextui-org/react";
+import { Slider, Button, Image } from "@heroui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faPause, faRepeat, faForwardStep, faBackwardStep } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect, useRef } from "react";

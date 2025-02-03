@@ -1,4 +1,4 @@
-import {Input, Button} from "@nextui-org/react";
+import {Input, Button} from "@heroui/react";
 
 const FormMusic = ({title, setTitle, artist, setArtist, album, mp3File, setAlbum, setMp3File, addMusic, cover, searchTrack}) => {
 

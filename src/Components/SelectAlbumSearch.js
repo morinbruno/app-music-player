@@ -1,5 +1,5 @@
-import { Image, ScrollShadow } from '@nextui-org/react';
-import { Spinner } from '@nextui-org/react'
+import { Image, ScrollShadow } from "@heroui/react";
+import { Spinner } from "@heroui/react"
 
 const SelectAlbumSearch = ({ albums, selectAlbum }) => {
     return (

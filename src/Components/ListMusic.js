@@ -14,7 +14,7 @@ import {
     DropdownMenu,
     DropdownSection,
     DropdownItem
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useEffect } from "react";
 import { Vibrant } from "node-vibrant/browser";
 import {
@@ -23,7 +23,7 @@ import {
     getAllSongs
 } from "../models/dbIndexed";
 import { API } from "../models/api";
-import { DeleteIcon } from "@nextui-org/shared-icons"
+import { DeleteIcon } from "@heroui/shared-icons"
 
 const ListMusic = ({ openAddMenu, setPistes, pistes, setCover, cover, setURLMusic, URLMusic, setMusicSelected, musicSelected }) => {
     const selectTrack = async (id) => {
