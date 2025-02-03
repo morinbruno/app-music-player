@@ -59,22 +59,6 @@ const getSong = (id) => {
     });
 };
 
-const updateSong = (id, updatedSong) => {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['songs'], 'readwrite');
-        const objectStore = transaction.objectStore('songs');
-        const request = objectStore.put({ ...updatedSong, id });
-
-        request.onsuccess = () => {
-            resolve(request.result);
-        };
-
-        request.onerror = (event) => {
-            reject(event.target.error);
-        };
-    });
-};
-
 const deleteSong = (id) => {
     return new Promise((resolve, reject) => {
         const transaction = db.transaction(['songs'], 'readwrite');
@@ -107,4 +91,4 @@ const getAllSongs = () => {
     });
 };
 
-export { openDB, addSong, getSong, updateSong, deleteSong, getAllSongs };
+export { openDB, addSong, getSong, deleteSong, getAllSongs };
